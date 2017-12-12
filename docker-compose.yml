@@ -1,0 +1,28 @@
+
+version: "3"
+services:
+  prerender:
+    build: ./prerender-docker
+    image: prerender
+    ports:
+      - 4000:3000
+    links:
+      - app
+  haproxy:
+    image: haproxy:1.7.5-alpine
+    volumes:
+      - ./reverse-proxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+      - ./reverse-proxy/log:/dev/log:rw
+    ports:
+      - 5000:80
+    links:
+      - app
+      - prerender
+  app:
+    image: nginx
+    volumes:
+      - ./app/app:/usr/share/nginx/html
+    ports:
+      - 8080:80
+        
+  
