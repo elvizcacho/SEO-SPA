@@ -24,5 +24,14 @@ services:
       - ./app/app:/usr/share/nginx/html
     ports:
       - 8080:80
+  varnish:
+    build: ./varnish
+    image: varnish
+    ports:
+      - 6000:80
+      - 7000:6081
+      - 8000:8080
+    links:
+      - haproxy
         
   
